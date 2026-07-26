@@ -111,22 +111,28 @@ export const SingleTimerView: React.FC<SingleTimerViewProps> = ({
   };
 
   return (
-    <div className="flex flex-col h-full justify-between p-3.5 bg-zinc-950 text-white select-none overflow-hidden">
+    <section id="single-timer-section" aria-labelledby="single-mode-heading" className="flex flex-col h-full justify-between p-3.5 bg-zinc-950 text-white select-none overflow-hidden">
+      <h2 id="single-mode-heading" className="sr-only">{t.singleMode}</h2>
+
       {/* Title & Editable Label */}
       <div className="flex items-center justify-between mb-1">
+        <label htmlFor="single-race-title-input" className="sr-only">项目标题</label>
         <input
+          id="single-race-title-input"
           type="text"
           value={raceTitle}
           onChange={(e) => setRaceTitle(e.target.value)}
           className="bg-zinc-900 border border-zinc-800 rounded-lg px-3 py-1.5 text-xs sm:text-sm text-amber-400 font-semibold focus:outline-none focus:border-amber-500 w-full mr-2"
           placeholder={t.singleTitlePlaceholder}
+          aria-label="项目标题"
         />
         {elapsedTime > 0 && (
           <button
+            id="btn-save-single-result"
             onClick={handleSave}
-            className="flex items-center gap-1 bg-amber-500 hover:bg-amber-400 text-zinc-950 px-2.5 py-1.5 rounded-lg text-xs font-bold transition-all shadow-md shrink-0"
+            className="flex items-center gap-1 bg-amber-500 hover:bg-amber-400 text-zinc-950 px-2.5 py-1.5 rounded-lg text-xs font-bold transition-all shadow-md shrink-0 focus:ring-2 focus:ring-amber-400 focus:outline-none"
           >
-            <Save className="w-3.5 h-3.5" />
+            <Save className="w-3.5 h-3.5" aria-hidden="true" />
             {t.saveResult}
           </button>
         )}
@@ -135,20 +141,20 @@ export const SingleTimerView: React.FC<SingleTimerViewProps> = ({
       {/* Main Digital Display */}
       <div className="relative my-2 py-5 px-4 bg-gradient-to-b from-zinc-900 to-zinc-950 rounded-2xl border border-zinc-800/80 shadow-2xl flex flex-col items-center justify-center">
         {/* Glow backdrop */}
-        <div className="absolute inset-0 bg-red-600/5 blur-xl pointer-events-none rounded-2xl" />
+        <div className="absolute inset-0 bg-red-600/5 blur-xl pointer-events-none rounded-2xl" aria-hidden="true" />
 
         <div className="text-[11px] font-mono text-zinc-400 mb-1 tracking-widest uppercase">
           {isRunning ? t.timingInProgress : t.ready}
         </div>
 
         {/* Large Time Display */}
-        <div className="font-mono text-4xl sm:text-5xl leading-snug py-1 font-black text-white tracking-tight drop-shadow-[0_0_15px_rgba(255,255,255,0.2)] flex items-center justify-center min-h-[64px]">
+        <div id="single-timer-display" className="font-mono text-4xl sm:text-5xl leading-snug py-1 font-black text-white tracking-tight drop-shadow-[0_0_15px_rgba(255,255,255,0.2)] flex items-center justify-center min-h-[64px]" role="timer" aria-live="polite">
           {formatTimeMs(elapsedTime)}
         </div>
 
         {/* Current Lap Split Info */}
         {laps.length > 0 && (
-          <div className="mt-1 text-xs font-mono text-amber-400/90">
+          <div id="single-timer-last-lap" className="mt-1 text-xs font-mono text-amber-400/90">
             {t.lastLap}: {formatTimeMs(laps[0].lapTime)}
           </div>
         )}
@@ -158,55 +164,60 @@ export const SingleTimerView: React.FC<SingleTimerViewProps> = ({
       <div className="grid grid-cols-2 gap-1.5 mb-2">
         {/* Starter Gun Countdown Launch Button */}
         <button
+          id="btn-single-gun-start"
           onClick={onStartCountdown}
           disabled={isRunning}
-          className="col-span-2 py-2.5 px-3 rounded-xl bg-gradient-to-r from-red-600 via-orange-600 to-amber-600 hover:from-red-500 hover:to-amber-500 text-white font-bold text-xs sm:text-sm flex items-center justify-center gap-1.5 shadow-lg shadow-red-950/50 disabled:opacity-50 disabled:cursor-not-allowed transition-all active:scale-[0.98]"
+          className="col-span-2 py-2.5 px-3 rounded-xl bg-gradient-to-r from-red-600 via-orange-600 to-amber-600 hover:from-red-500 hover:to-amber-500 text-white font-bold text-xs sm:text-sm flex items-center justify-center gap-1.5 shadow-lg shadow-red-950/50 disabled:opacity-50 disabled:cursor-not-allowed transition-all active:scale-[0.98] focus:ring-2 focus:ring-amber-400 focus:outline-none"
         >
-          <Zap className="w-4 h-4 fill-amber-300 text-amber-300 shrink-0" />
+          <Zap className="w-4 h-4 fill-amber-300 text-amber-300 shrink-0" aria-hidden="true" />
           {t.gunStart}
         </button>
 
         {/* Play/Pause Button */}
         {isRunning ? (
           <button
+            id="btn-single-pause"
             onClick={pauseTimer}
-            className="py-2.5 px-3 rounded-xl bg-amber-600 hover:bg-amber-500 text-white font-bold text-xs sm:text-sm flex items-center justify-center gap-1.5 transition-all"
+            className="py-2.5 px-3 rounded-xl bg-amber-600 hover:bg-amber-500 text-white font-bold text-xs sm:text-sm flex items-center justify-center gap-1.5 transition-all focus:ring-2 focus:ring-amber-400 focus:outline-none"
           >
-            <Pause className="w-4 h-4 fill-current shrink-0" />
+            <Pause className="w-4 h-4 fill-current shrink-0" aria-hidden="true" />
             {t.pause}
           </button>
         ) : (
           <button
+            id="btn-single-start"
             onClick={startTimer}
-            className="py-2.5 px-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs sm:text-sm flex items-center justify-center gap-1.5 transition-all"
+            className="py-2.5 px-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs sm:text-sm flex items-center justify-center gap-1.5 transition-all focus:ring-2 focus:ring-emerald-400 focus:outline-none"
           >
-            <Play className="w-4 h-4 fill-current shrink-0" />
+            <Play className="w-4 h-4 fill-current shrink-0" aria-hidden="true" />
             {t.directStart}
           </button>
         )}
 
         {/* Lap Button */}
         <button
+          id="btn-single-lap"
           onClick={recordLap}
           disabled={!isRunning}
-          className="py-2.5 px-3 rounded-xl bg-zinc-800 hover:bg-zinc-700 text-zinc-200 font-bold text-xs sm:text-sm flex items-center justify-center gap-1.5 disabled:opacity-40 transition-all border border-zinc-700/50"
+          className="py-2.5 px-3 rounded-xl bg-zinc-800 hover:bg-zinc-700 text-zinc-200 font-bold text-xs sm:text-sm flex items-center justify-center gap-1.5 disabled:opacity-40 transition-all border border-zinc-700/50 focus:ring-2 focus:ring-amber-400 focus:outline-none"
         >
-          <Flag className="w-4 h-4 shrink-0" />
+          <Flag className="w-4 h-4 shrink-0" aria-hidden="true" />
           {t.lapSplit}
         </button>
 
         {/* Reset Button */}
         <button
+          id="btn-single-reset"
           onClick={resetTimer}
-          className="col-span-2 py-1.5 px-3 rounded-xl bg-zinc-900 hover:bg-zinc-800 text-zinc-400 hover:text-zinc-200 text-xs font-semibold flex items-center justify-center gap-1.5 transition-all border border-zinc-800"
+          className="col-span-2 py-1.5 px-3 rounded-xl bg-zinc-900 hover:bg-zinc-800 text-zinc-400 hover:text-zinc-200 text-xs font-semibold flex items-center justify-center gap-1.5 transition-all border border-zinc-800 focus:ring-2 focus:ring-amber-400 focus:outline-none"
         >
-          <RotateCcw className="w-3.5 h-3.5 shrink-0" />
+          <RotateCcw className="w-3.5 h-3.5 shrink-0" aria-hidden="true" />
           {t.resetTimer}
         </button>
       </div>
 
       {/* Lap Times Record List */}
-      <div className="flex-1 overflow-y-auto max-h-48 bg-zinc-900/60 rounded-xl border border-zinc-800/80 p-2 space-y-1">
+      <div id="single-laps-container" className="flex-1 overflow-y-auto max-h-48 bg-zinc-900/60 rounded-xl border border-zinc-800/80 p-2 space-y-1">
         <div className="text-[10px] font-mono text-zinc-500 px-2 py-1 flex justify-between border-b border-zinc-800">
           <span>{t.lapNumber}</span>
           <span>{t.splitTime}</span>
@@ -221,8 +232,9 @@ export const SingleTimerView: React.FC<SingleTimerViewProps> = ({
             const isSlowest = laps.length > 1 && lap.lapTime === slowestTime;
 
             return (
-              <div
+              <article
                 key={lap.lapNumber}
+                id={`lap-item-${lap.lapNumber}`}
                 className={`flex items-center justify-between px-2.5 py-1.5 rounded-lg text-xs font-mono transition-all ${
                   isFastest
                     ? 'bg-emerald-950/60 text-emerald-300 border border-emerald-800/50'
@@ -246,12 +258,11 @@ export const SingleTimerView: React.FC<SingleTimerViewProps> = ({
                 </div>
                 <div className="font-semibold">{formatTimeMs(lap.lapTime)}</div>
                 <div className="text-zinc-400">{formatTimeMs(lap.splitTime)}</div>
-              </div>
+              </article>
             );
           })
         )}
       </div>
-    </div>
+    </section>
   );
 };
-

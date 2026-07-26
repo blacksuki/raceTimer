@@ -31,43 +31,48 @@ export const MobileFrame: React.FC<MobileFrameProps> = ({
       {/* Outer Mobile Frame (固定移动竖屏) */}
       <div className="relative w-full max-w-md h-screen sm:h-[840px] sm:max-h-[92vh] bg-zinc-950 sm:border-8 sm:border-zinc-800/90 sm:rounded-[40px] shadow-[0_0_50px_rgba(239,68,68,0.15)] flex flex-col overflow-hidden">
         {/* Top Camera Notch / Bar for Device Feel */}
-        <div className="hidden sm:flex justify-center items-center pt-2 pb-1 bg-zinc-950 shrink-0">
+        <div className="hidden sm:flex justify-center items-center pt-2 pb-1 bg-zinc-950 shrink-0" aria-hidden="true">
           <div className="w-24 h-4 bg-zinc-900 rounded-full flex items-center justify-center gap-2">
             <div className="w-2 h-2 rounded-full bg-zinc-800" />
             <div className="w-3 h-1 bg-zinc-800 rounded-full" />
           </div>
         </div>
 
-        {/* Status & Quick Bar */}
-        <div className="bg-zinc-900/90 border-b border-zinc-800 px-3 py-2 flex items-center justify-between shrink-0 select-none">
-          {/* Logo Brand */}
+        {/* Header & Status Bar (Semantic Header) */}
+        <header id="app-header" className="bg-zinc-900/90 border-b border-zinc-800 px-3 py-2 flex items-center justify-between shrink-0 select-none">
+          {/* Logo & Main H1 Heading */}
           <div className="flex items-center gap-1.5">
-            <div className="w-6 h-6 rounded-lg bg-gradient-to-tr from-red-600 to-amber-500 flex items-center justify-center font-black text-zinc-950 text-xs shadow-md">
+            <div className="w-6 h-6 rounded-lg bg-gradient-to-tr from-red-600 to-amber-500 flex items-center justify-center font-black text-zinc-950 text-xs shadow-md" aria-hidden="true">
               ⚡
             </div>
-            <span className="font-black text-xs tracking-wider uppercase bg-gradient-to-r from-amber-400 via-orange-400 to-red-500 bg-clip-text text-transparent">
+            <h1 id="app-title" className="font-black text-xs tracking-wider uppercase bg-gradient-to-r from-amber-400 via-orange-400 to-red-500 bg-clip-text text-transparent">
               {t.appTitle}
-            </span>
+            </h1>
           </div>
 
-          {/* Controls: Audio Test, Language, History */}
+          {/* Quick Action Toolbar */}
           <div className="flex items-center gap-1.5">
             {/* Audio Test Panel Button */}
             <button
+              id="btn-open-audio-test"
               onClick={onOpenAudioTest}
-              className="p-1.5 rounded-lg bg-zinc-800 hover:bg-zinc-700 text-amber-400 transition-all border border-zinc-700/60"
+              className="p-1.5 rounded-lg bg-zinc-800 hover:bg-zinc-700 text-amber-400 transition-all border border-zinc-700/60 focus:ring-2 focus:ring-amber-500 focus:outline-none"
               title={t.audioTestTitle}
+              aria-label={t.audioTestTitle}
             >
               <Volume2 className="w-4 h-4" />
             </button>
 
-            {/* Language Switcher */}
+            {/* Language Switcher Dropdown */}
             <div className="relative flex items-center bg-zinc-800 rounded-lg border border-zinc-700/60 p-0.5">
-              <Languages className="w-3.5 h-3.5 text-zinc-400 ml-1.5" />
+              <Languages className="w-3.5 h-3.5 text-zinc-400 ml-1.5" aria-hidden="true" />
+              <label htmlFor="select-language" className="sr-only">选择语言 / Select Language</label>
               <select
+                id="select-language"
                 value={language}
                 onChange={(e) => onChangeLanguage(e.target.value as Language)}
                 className="bg-transparent text-[11px] font-semibold text-zinc-200 px-1 py-0.5 focus:outline-none cursor-pointer"
+                aria-label="选择语言"
               >
                 <option value="zh-CN" className="bg-zinc-900 text-white">
                   中文
@@ -81,61 +86,68 @@ export const MobileFrame: React.FC<MobileFrameProps> = ({
               </select>
             </div>
 
-            {/* History Button */}
+            {/* History Records Button */}
             <button
+              id="btn-open-history"
               onClick={onOpenHistory}
-              className="relative p-1.5 rounded-lg bg-zinc-800 hover:bg-zinc-700 text-amber-400 transition-all border border-zinc-700/60"
+              className="relative p-1.5 rounded-lg bg-zinc-800 hover:bg-zinc-700 text-amber-400 transition-all border border-zinc-700/60 focus:ring-2 focus:ring-amber-500 focus:outline-none"
               title={t.historyTitle}
+              aria-label={`${t.historyTitle} (${historyCount})`}
             >
               <History className="w-4 h-4" />
               {historyCount > 0 && (
-                <span className="absolute -top-1 -right-1 w-4 h-4 bg-red-600 text-white font-mono text-[9px] font-bold rounded-full flex items-center justify-center border border-zinc-900 shadow">
+                <span id="history-badge-count" className="absolute -top-1 -right-1 w-4 h-4 bg-red-600 text-white font-mono text-[9px] font-bold rounded-full flex items-center justify-center border border-zinc-900 shadow">
                   {historyCount}
                 </span>
               )}
             </button>
           </div>
-        </div>
+        </header>
 
-        {/* Mode Selector Tabs */}
-        <div className="bg-zinc-900/60 p-1.5 border-b border-zinc-800 flex gap-1 shrink-0 select-none">
+        {/* Mode Selector Navigation Tabs (Semantic Nav) */}
+        <nav id="mode-nav-tabs" aria-label="Race Modes" className="bg-zinc-900/60 p-1.5 border-b border-zinc-800 flex gap-1 shrink-0 select-none">
           <button
+            id="tab-single-mode"
             onClick={() => onSelectMode('single')}
-            className={`flex-1 py-1.5 px-3 rounded-lg text-xs font-bold flex items-center justify-center gap-1.5 transition-all ${
+            aria-selected={mode === 'single'}
+            className={`flex-1 py-1.5 px-3 rounded-lg text-xs font-bold flex items-center justify-center gap-1.5 transition-all focus:ring-2 focus:ring-amber-500 focus:outline-none ${
               mode === 'single'
                 ? 'bg-amber-500 text-zinc-950 shadow-md font-extrabold'
                 : 'text-zinc-400 hover:text-zinc-200 hover:bg-zinc-800/60'
             }`}
           >
-            <Timer className="w-3.5 h-3.5" />
+            <Timer className="w-3.5 h-3.5" aria-hidden="true" />
             {t.singleMode}
           </button>
 
           <button
+            id="tab-eight-lane-mode"
             onClick={() => onSelectMode('eight_lane')}
-            className={`flex-1 py-1.5 px-3 rounded-lg text-xs font-bold flex items-center justify-center gap-1.5 transition-all ${
+            aria-selected={mode === 'eight_lane'}
+            className={`flex-1 py-1.5 px-3 rounded-lg text-xs font-bold flex items-center justify-center gap-1.5 transition-all focus:ring-2 focus:ring-amber-500 focus:outline-none ${
               mode === 'eight_lane'
                 ? 'bg-amber-500 text-zinc-950 shadow-md font-extrabold'
                 : 'text-zinc-400 hover:text-zinc-200 hover:bg-zinc-800/60'
             }`}
           >
-            <Users className="w-3.5 h-3.5" />
+            <Users className="w-3.5 h-3.5" aria-hidden="true" />
             {t.raceMode}
           </button>
-        </div>
+        </nav>
 
-        {/* Main Interactive Screen Content */}
-        <div className="flex-1 overflow-hidden relative">{children}</div>
+        {/* Main Interactive Screen Content (Semantic Main) */}
+        <main id="main-content" className="flex-1 overflow-hidden relative">
+          {children}
+        </main>
 
-        {/* Bottom Track Stadium Graphic Bar */}
-        <div className="bg-zinc-900/90 border-t border-zinc-800 px-3 py-1.5 flex items-center justify-between text-[10px] text-zinc-500 font-mono shrink-0 select-none">
+        {/* Footer Bar (Semantic Footer) */}
+        <footer id="app-footer" className="bg-zinc-900/90 border-t border-zinc-800 px-3 py-1.5 flex items-center justify-between text-[10px] text-zinc-500 font-mono shrink-0 select-none">
           <span className="flex items-center gap-1">
-            <Trophy className="w-3 h-3 text-amber-500" /> Web Audio & Speech Engine
+            <Trophy className="w-3 h-3 text-amber-500" aria-hidden="true" /> Web Audio & Speech Engine
           </span>
           <span>{t.msTiming}</span>
-        </div>
+        </footer>
       </div>
     </div>
   );
 };
-
