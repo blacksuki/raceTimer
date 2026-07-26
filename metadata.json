@@ -1,0 +1,6 @@
+{
+  "name": "Race Timer",
+  "description": "赛跑计时器 - 具备多语言语音倒计时、拟真发令枪音效、单人计圈与8跑道同步计时的专业赛跑计时软件",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
